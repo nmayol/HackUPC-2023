@@ -13,6 +13,7 @@ end
 -- Main bot function
 function bot_main(me)
 
+    print(me:health())
     -- Update cooldowns
     for i = 1, 3 do
         if cooldowns[i] > 0 then
@@ -56,13 +57,10 @@ function bot_main(me)
         end        
         
         --(3.1) if player has bad health run away
-        if salut < 20 then
-            if (cooldowns[2] == 0) then
-                me:cast(1,dir:neg())
-                cooldowns[2] = 200
-            end
+        if salut < 5 then
+            me:move(dir:neg())
         --(3.2) if health is intermediate or someone has influenced two times in a row
-        elseif (salut >= 20 and salut < 30) or last_shooter >= 2 then
+        elseif (salut >= 5 and salut < 20) or last_shooter >= 2 then
             if cooldowns[3] == 0 and dist == 2 then -- atacar mele
                 me:cast(2, dir)
                 cooldowns[3] = 50
@@ -92,7 +90,7 @@ function bot_main(me)
         end
 
     elseif dist < 10 then -- (4) cas que l'enemic es una bala i esta a poca distancia
-        if (me:pos():x() < 5 or me:pos():x() > 490) or (me:pos():y() < 10 or me:pos():y() > 490) then -- (4.1) Si la bala ve pero esta a un dels limits de la pista
+        if (me:pos():x() < 10 or me:pos():x() > 490) or (me:pos():y() < 10 or me:pos():y() > 490) then -- (4.1) Si la bala ve pero esta a un dels limits de la pista
             if (cooldowns[2] == 0) then 
                 me:move(me_pos:sub(vec.new(250, 250)):neg())
                 cooldowns[2] = 200
@@ -104,6 +102,8 @@ function bot_main(me)
             end
         end
 
+    else
+        me:move(vec.new(0,0))
     end
 
 
